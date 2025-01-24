@@ -57,19 +57,4 @@ public class UserService {
         userRepository.save(newUser);
     }
 
-    public void createAddmin() {
-        User newUser = new User();
-        newUser.setFirstName("admin");
-        newUser.setLastName("admin");
-        newUser.setEmail("admin@email.com");
-        newUser.setPhoneNumber("+1-234-567-8901");
-        newUser.setCellule("admin");
-        newUser.setCycle("admin");
-        newUser.setMajor("admin");
-        newUser.setDateOfBirth(ZonedDateTime.parse("2002-11-03T10:15:30Z").toInstant());
-        newUser.setPassword(config.passwordEncoder().encode("admin"));
-        newUser.setRole(Role.ADMIN);
-
-        userRepository.save(newUser);
-    }
 }

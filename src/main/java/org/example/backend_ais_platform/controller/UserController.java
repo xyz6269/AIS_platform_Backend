@@ -20,11 +20,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/admin")
-    public void addAdmin() {
-        userService.createAddmin();
-    }
-
     @PostMapping("/login")
     public ResponseEntity<String> logIn(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(userService.logIn(request));
