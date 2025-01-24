@@ -8,14 +8,11 @@ import org.example.backend_ais_platform.enums.Role;
 import org.example.backend_ais_platform.repository.UserRepository;
 import org.example.backend_ais_platform.security.SecurityConfig;
 import org.example.backend_ais_platform.security.jwt.JwtUtil;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.time.ZonedDateTime;
 
 @Service
 @RequiredArgsConstructor
