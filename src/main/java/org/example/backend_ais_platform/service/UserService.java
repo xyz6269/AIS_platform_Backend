@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.backend_ais_platform.DTO.LoginRequest;
 import org.example.backend_ais_platform.DTO.SignupRequest;
 import org.example.backend_ais_platform.entity.User;
-import org.example.backend_ais_platform.exceptions.RoleNotFoundException;
-import org.example.backend_ais_platform.exceptions.UserNotFoundException;
-import org.example.backend_ais_platform.repository.RoleRepository;
+import org.example.backend_ais_platform.enums.Role;
 import org.example.backend_ais_platform.repository.UserRepository;
 import org.example.backend_ais_platform.security.SecurityConfig;
 import org.example.backend_ais_platform.security.jwt.JwtUtil;
@@ -17,6 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -24,29 +24,52 @@ public class UserService {
     private final UserRepository userRepository;
     private final SecurityConfig config;
     private final AuthenticationManager authenticationManager;
-    private final RoleRepository roleRepository;
 
-    public ResponseEntity<String> logIn(LoginRequest request) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
+
+    public String logIn(LoginRequest request) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(request.email(), request.password());
         Authentication authentication = authenticationManager.authenticate(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = JwtUtil.generateToken((org.springframework.security.core.userdetails.User) authentication.getPrincipal());
-        return ResponseEntity.ok(jwt);
+
+
+        if (authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.User u) {
+            return JwtUtil.generateToken((org.springframework.security.core.userdetails.User) authentication.getPrincipal());
+        }
+        else {
+            throw new RuntimeException("incorrect credentials");
+        }
     }
 
-    public ResponseEntity<String> signUp(SignupRequest request) {
+    public void signUp(SignupRequest request) {
+
         User newUser = new User();
-        newUser.setFirstName(request.getFirstName());
-        newUser.setLastName(request.getLastName());
-        newUser.setEmail(request.getEmail());
-        newUser.setPhoneNumber(request.getPhoneNumber());
-        newUser.setCellule(request.getCellule());
-        newUser.setCycle(request.getCycle());
-        newUser.setMajor(request.getMajor());
-        newUser.setDateOfBirth(request.getDateOfBirth());
-        newUser.setPassword(config.passwordEncoder().encode(request.getPassword()));
-        newUser.setRole(roleRepository.findRoleByRoleName("role_user").orElseThrow(() -> new RoleNotFoundException("no such roles")));
+        newUser.setFirstName(request.firstName());
+        newUser.setLastName(request.lastName());
+        newUser.setEmail(request.email());
+        newUser.setPhoneNumber(request.phoneNumber());
+        newUser.setCellule(request.cellule());
+        newUser.setCycle(request.cycle());
+        newUser.setMajor(request.major());
+        newUser.setDateOfBirth(request.dateOfBirth().toInstant());
+        newUser.setPassword(config.passwordEncoder().encode(request.password()));
+        newUser.setRole(Role.USER);
+
         userRepository.save(newUser);
-        return ResponseEntity.ok("User created successfully");
+    }
+
+    public void createAddmin() {
+        User newUser = new User();
+        newUser.setFirstName("admin");
+        newUser.setLastName("admin");
+        newUser.setEmail("admin@email.com");
+        newUser.setPhoneNumber("+1-234-567-8901");
+        newUser.setCellule("admin");
+        newUser.setCycle("admin");
+        newUser.setMajor("admin");
+        newUser.setDateOfBirth(ZonedDateTime.parse("2002-11-03T10:15:30Z").toInstant());
+        newUser.setPassword(config.passwordEncoder().encode("admin"));
+        newUser.setRole(Role.ADMIN);
+
+        userRepository.save(newUser);
     }
 }

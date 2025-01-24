@@ -1,13 +1,17 @@
 package org.example.backend_ais_platform.DTO;
 
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-@Data
-@NoArgsConstructor
-public class LoginRequest {
+public record LoginRequest(
 
-    private String email;
-    private String password;
-}
+        @Email
+        @NotBlank
+        String email,
+
+        @NotBlank
+        @Size(min = 15, max = 25)
+        String password
+) {}

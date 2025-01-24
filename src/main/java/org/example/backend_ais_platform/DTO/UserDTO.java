@@ -1,35 +1,41 @@
 package org.example.backend_ais_platform.DTO;
 
+import jakarta.validation.constraints.*;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.ZonedDateTime;
 
-import java.time.LocalDate;
 
-@Data
-@NoArgsConstructor
-public class UserDTO {
+public record UserDTO(
 
-    private String firstName;
+        @NotBlank
+        String firstName,
 
-    private String lastName;
+        @NotBlank
+        String lastName,
 
-    private String phoneNumber;
+        @NotBlank
+        @Pattern(regexp = "(\\+\\d{0,2})?((-|\\w)?\\d{3,4}){3,4}") // Basic International Phone Regex
+        // I'd be a bit more strict to ensure a more normalized database
+        String phoneNumber,
 
-    private LocalDate dateOfBirth;
+        @Past
+        ZonedDateTime dateOfBirth,
 
-    private String cycle;
+        String cycle,
 
-    private String major;
+        String major,
 
-    private String email;
+        @Email
+        @NotBlank
+        String email,
 
-    private String password;
+        @NotBlank
+        @Size(min = 15, max = 25)
+        String password,
 
-    private String cellule;
+        String cellule,
 
-    private Integer nbAbs;
+        Integer nbAbs,
 
-    private Integer rank;
-
-}
+        Integer rank
+) {}

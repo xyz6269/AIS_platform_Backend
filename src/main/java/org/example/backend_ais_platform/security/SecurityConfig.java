@@ -2,13 +2,13 @@ package org.example.backend_ais_platform.security;
 
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -23,21 +23,27 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, @Value("${server.ssl.enabled:true}") boolean sslEnabled) throws Exception {
+
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .requiresChannel(channel ->
-                        channel.anyRequest()
-                                .requiresSecure()
-                )
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 .anyRequest()
-                                .permitAll());
+                                .permitAll()
+                );
+        if (sslEnabled) {
+            httpSecurity.requiresChannel(channel ->
+                    channel
+                            .anyRequest()
+                            .requiresSecure()
+            );
+        }
+
         return httpSecurity.build();
     }
 }

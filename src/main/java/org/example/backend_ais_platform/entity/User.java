@@ -1,18 +1,16 @@
 package org.example.backend_ais_platform.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.example.backend_ais_platform.enums.Role;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -31,7 +29,7 @@ public class User {
     private String phoneNumber;
 
     @Column(name = "date_of_birth", nullable = false)
-    private LocalDate dateOfBirth;
+    private Instant dateOfBirth;
 
     @Column(name = "cycle", length = 50, nullable = false)
     private String cycle;
@@ -54,9 +52,117 @@ public class User {
     @Column(name = "rank")
     private Integer rank;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
+    @Enumerated(EnumType.STRING)
     private Role role;
 
 
+
+
+
+
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Instant getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Instant dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getCycle() {
+        return cycle;
+    }
+
+    public void setCycle(String cycle) {
+        this.cycle = cycle;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getCellule() {
+        return cellule;
+    }
+
+    public void setCellule(String cellule) {
+        this.cellule = cellule;
+    }
+
+    public Integer getNbAbs() {
+        return nbAbs;
+    }
+
+    public void setNbAbs(Integer nbAbs) {
+        this.nbAbs = nbAbs;
+    }
+
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }

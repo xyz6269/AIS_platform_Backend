@@ -1,30 +1,44 @@
 package org.example.backend_ais_platform.DTO;
 
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.*;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
-@Data
-@NoArgsConstructor
-public class SignupRequest {
 
-    private String firstName;
+public record SignupRequest(
 
-    private String lastName;
+        @NotBlank
+        String firstName,
 
-    private String phoneNumber;
+        @NotBlank
+        String lastName,
 
-    private LocalDate dateOfBirth;
+        @NotBlank
+        @Pattern(regexp = "(\\+\\d{0,2})?((-|\\w)?\\d{3,4}){3,4}") // Basic International Phone Regex
+        // I'd be a bit more strict to ensure a more normalized database
+        String phoneNumber,
 
-    private String cycle;
+        @Past
+        ZonedDateTime dateOfBirth,
 
-    private String major;
+        String cycle,
 
-    private String email;
+        String major,
 
-    private String password;
+        @Email
+        @NotBlank
+        String email,
 
-    private String cellule;
-}
+        @NotBlank
+        @Size(min = 15, max = 25)
+        String password,
+
+        String cellule
+) {
+    @AssertTrue(message = "{password.includes.name}")
+    // The above is a MessageSource Integration, see
+    // https://docs.spring.io/spring-framework/reference/core/beans/context-introduction.html#context-functionality-messagesource
+    public boolean passwordDoesNotIncludeName() {
+        return password.contains(firstName) || password.contains(lastName);
+    }}
