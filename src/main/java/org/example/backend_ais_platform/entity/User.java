@@ -5,6 +5,8 @@ package org.example.backend_ais_platform.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.example.backend_ais_platform.enums.Cellule;
+import org.example.backend_ais_platform.enums.Gender;
 import org.example.backend_ais_platform.enums.Role;
 
 import java.time.Instant;
@@ -43,8 +45,11 @@ public class User {
     @Column(name = "password", length = 200, nullable = false)
     private String password;
 
+    @Column(name = "gender", length = 50, nullable = false)
+    private Gender gender;
+
     @Column(name = "cellule", length = 50)
-    private String cellule;
+    private Cellule cellule;
 
     @Column(name = "nb_abs")
     private Integer nbAbs;
@@ -54,10 +59,6 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
-
-
-
 
 
 
@@ -134,11 +135,11 @@ public class User {
         this.password = password;
     }
 
-    public String getCellule() {
+    public Cellule getCellule() {
         return cellule;
     }
 
-    public void setCellule(String cellule) {
+    public void setCellule(Cellule cellule) {
         this.cellule = cellule;
     }
 
@@ -164,5 +165,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 }

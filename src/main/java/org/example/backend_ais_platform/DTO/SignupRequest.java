@@ -15,7 +15,7 @@ public record SignupRequest(
         String lastName,
 
         @NotBlank
-        @Pattern(regexp = "(\\+\\d{0,2})?((-|\\w)?\\d{3,4}){3,4}") // Basic International Phone Regex
+        @Pattern(regexp = "(\\+\\d{0,2})?((-|\\w|\\s)?\\d{3,4}){3,4}") // Basic International Phone Regex
         // I'd be a bit more strict to ensure a more normalized database
         String phoneNumber,
 
@@ -26,15 +26,16 @@ public record SignupRequest(
 
         String major,
 
+        @NotBlank
+        String gender,
+
         @Email
         @NotBlank
         String email,
 
         @NotBlank
-        @Size(min = 15, max = 25)
-        String password,
-
-        String cellule
+        @Size(min = 5, max = 25)
+        String password
 ) {
     @AssertTrue(message = "{password.includes.name}")
     // The above is a MessageSource Integration, see
